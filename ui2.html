@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login / Sign Up — Pink Theme</title>
+  <style>
+    :root{
+      --pink:#fb6a90;
+      --sky:#b0d3f2;
+      --paper:#fafdff;
+      --accent:#fe0c21;
+      --muted:#6b6b6b;
+      --card-radius:14px;
+      --max-width:920px;
+      --shadow: 0 8px 30px rgba(107,107,107,0.12);
+      --glass: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,253,255,0.85));
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";background:linear-gradient(135deg,var(--paper),#fff);color:#222}
+    .wrap{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:32px;
+    }
+
+    .container{
+      width:100%;
+      max-width:var(--max-width);
+      display:grid;
+      grid-template-columns: 460px 1fr;
+      gap:32px;
+      align-items:center;
+      padding:28px;
+    }
+
+    /* left card - form */
+    .card{
+      background: var(--glass);
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow);
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      min-height:420px;
+      backdrop-filter: blur(6px) saturate(120%);
+    }
+
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .logo{
+      width:48px;height:48px;border-radius:10px;background:var(--pink);
+      display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:20px;
+      box-shadow: 0 6px 14px rgba(251,106,144,0.2);
+    }
+    .brand h2{margin:0;font-size:18px;color:#222}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    .tabs{
+      display:flex;
+      gap:8px;
+      margin-top:6px;
+    }
+    .tab{
+      padding:8px 14px;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;color:var(--muted);
+      background:transparent;border:none;
+    }
+    .tab.active{
+      background: linear-gradient(90deg,var(--pink),#ff89a8);
+      color:white;
+      box-shadow: 0 6px 18px rgba(251,106,144,0.18);
+    }
+
+    .form{
+      margin-top:6px;display:flex;flex-direction:column;gap:12px;
+    }
+
+    label{font-size:12px;color:#444;margin-bottom:4px;font-weight:600}
+    input[type="text"], input[type="password"], input[type="email"]{
+      width:100%;
+      padding:12px 14px;border-radius:8px;border:1px solid #e6e9ee;background:white;
+      font-size:14px;
+    }
+    input:focus{outline:none;border-color:var(--sky);box-shadow:0 6px 18px rgba(176,211,242,0.25)}
+
+    .small{
+      font-size:12px;color:var(--muted);
+    }
+
+    .controls{
+      display:flex;justify-content:space-between;align-items:center;margin-top:8px;
+    }
+    .link{font-size:13px;color:var(--pink);cursor:pointer;font-weight:600}
+
+    .row{
+      display:flex;gap:10px;
+    }
+    .btn{
+      padding:10px 18px;border-radius:10px;border:none;font-weight:700;cursor:pointer;font-size:14px;
+    }
+    .btn.ghost{
+      background:transparent;color:var(--pink);border:1px solid rgba(251,106,144,0.18);
+    }
+    .btn.primary{
+      background: linear-gradient(90deg,var(--pink),#ff89a8);color:white;box-shadow:0 8px 18px rgba(251,106,144,0.16)
+    }
+
+    .note{font-size:12px;color:#666;margin-top:6px}
+
+    /* right panel - preview / illustration */
+    .panel{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:20px;
+      flex-direction:column;
+    }
+    .preview{
+      width:100%;
+      height:360px;
+      border-radius:14px;
+      background: linear-gradient(180deg,var(--sky),#e7f2ff);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      box-shadow: 0 12px 40px rgba(176,211,242,0.15);
+      padding:20px;
+    }
+    .preview h3{margin:0;color:#083a66}
+    .preview p{margin:8px 0 0;color:#0f4671;font-size:13px;opacity:0.95}
+
+    .color-swatch{
+      display:flex;
+      gap:8px;
+      margin-top:18px;
+    }
+    .sw{
+      width:36px;height:36px;border-radius:8px;border:1px solid rgba(0,0,0,0.06)
+    }
+    .sw.pink{background:var(--pink)}
+    .sw.sky{background:var(--sky)}
+    .sw.paper{background:var(--paper)}
+    .sw.red{background:var(--accent)}
+
+    /* small helpers */
+    .error{color:#b71c1c;font-size:12px;margin-top:6px}
+    .success{color:#0b6b2f;font-size:13px;margin-top:6px;font-weight:600}
+
+    @media (max-width:900px){
+      .container{grid-template-columns:1fr; padding:20px}
+      .preview{height:220px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="container" role="main">
+      <!-- FORM CARD -->
+      <section class="card" aria-labelledby="authHeading">
+        <div class="brand">
+          <div class="logo">U</div>
+          <div>
+            <h2 id="authHeading">user</h2>
+            <p>Sign in or create an account</p>
+          </div>
+        </div>
+
+        <div class="tabs" role="tablist">
+          <button class="tab active" id="tabSignIn" role="tab" aria-selected="true">Sign In</button>
+          <button class="tab" id="tabSignUp" role="tab" aria-selected="false">Create Account</button>
+        </div>
+
+        <form class="form" id="formSignIn" autocomplete="on" aria-hidden="false">
+          <div>
+            <label for="siEmail">Email</label>
+            <input id="siEmail" type="email" placeholder="you@example.com" required />
+          </div>
+          <div>
+            <label for="siPassword">Password</label>
+            <input id="siPassword" type="password" placeholder="••••••••" required />
+          </div>
+
+          <div class="controls">
+            <div class="small"><input id="remember" type="checkbox" /> <label for="remember">Remember me</label></div>
+            <div class="link" id="forgot">Forgot?</div>
+          </div>
+
+          <div class="row" style="margin-top:8px">
+            <button type="button" class="btn ghost" id="guestBtn">Guest Mode</button>
+            <button type="submit" class="btn primary" id="signInBtn">Sign In</button>
+          </div>
+
+          <div id="siMsg" aria-live="polite"></div>
+        </form>
+
+        <form class="form" id="formSignUp" style="display:none" aria-hidden="true" autocomplete="on">
+          <div>
+            <label for="suName">Full name</label>
+            <input id="suName" type="text" placeholder="Your name" required />
+          </div>
+          <div>
+            <label for="suEmail">Email</label>
+            <input id="suEmail" type="email" placeholder="you@example.com" required />
+          </div>
+          <div>
+            <label for="suPassword">Password</label>
+            <input id="suPassword" type="password" placeholder="Min 6 characters" required />
+          </div>
+
+          <div class="note">By creating an account you accept the demo terms. (No real backend)</div>
+
+          <div class="row" style="margin-top:6px">
+            <button type="button" class="btn ghost" id="cancelSignUp">Cancel</button>
+            <button type="submit" class="btn primary" id="createBtn">Create</button>
+          </div>
+
+          <div id="suMsg" aria-live="polite"></div>
+        </form>
+      </section>
+
+      <!-- PREVIEW / ILLUSTRATION -->
+      <aside class="panel" aria-label="Theme preview">
+        <div class="preview" role="img" aria-label="Preview panel">
+          <h3>Welcome ✨</h3>
+          <p>Friendly pink & sky theme — modern, mobile-ready.</p>
+
+          <div class="color-swatch" aria-hidden="true">
+            <div class="sw pink" title="#fb6a90"></div>
+            <div class="sw sky" title="#b0d3f2"></div>
+            <div class="sw paper" title="#fafdff"></div>
+            <div class="sw red" title="#fe0c21"></div>
+          </div>
+        </div>
+
+        <div style="text-align:center">
+          <p style="margin:0;font-size:13px;color:#555">This is a client-only demo.</p>
+          <p style="margin:6px 0 0;color:#777;font-size:12px">© 2025 YourApp — all rights reserved.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // UI switching
+    const tabSignIn = document.getElementById('tabSignIn');
+    const tabSignUp = document.getElementById('tabSignUp');
+    const fSignIn = document.getElementById('formSignIn');
+    const fSignUp = document.getElementById('formSignUp');
+
+    function showSignIn(){
+      tabSignIn.classList.add('active');
+      tabSignUp.classList.remove('active');
+      tabSignIn.setAttribute('aria-selected','true');
+      tabSignUp.setAttribute('aria-selected','false');
+      fSignIn.style.display='flex';
+      fSignUp.style.display='none';
+      fSignIn.setAttribute('aria-hidden','false');
+      fSignUp.setAttribute('aria-hidden','true');
+    }
+    function showSignUp(){
+      tabSignUp.classList.add('active');
+      tabSignIn.classList.remove('active');
+      tabSignUp.setAttribute('aria-selected','true');
+      tabSignIn.setAttribute('aria-selected','false');
+      fSignUp.style.display='flex';
+      fSignIn.style.display='none';
+      fSignUp.setAttribute('aria-hidden','false');
+      fSignIn.setAttribute('aria-hidden','true');
+    }
+
+    tabSignIn.addEventListener('click', showSignIn);
+    tabSignUp.addEventListener('click', showSignUp);
+
+    // Simple client-side "mock" auth
+    const users = {}; // in-memory storage (will reset on reload)
+
+    // Sign Up
+    document.getElementById('formSignUp').addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('suName').value.trim();
+      const email = document.getElementById('suEmail').value.trim().toLowerCase();
+      const pwd = document.getElementById('suPassword').value;
+
+      const msg = document.getElementById('suMsg');
+      msg.textContent=''; msg.className='';
+
+      if(!name || !email || !pwd){ msg.textContent='Please fill out all fields.'; msg.className='error'; return; }
+      if(pwd.length < 6){ msg.textContent='Password must be at least 6 characters.'; msg.className='error'; return; }
+      if(users[email]){ msg.textContent='An account with that email already exists.'; msg.className='error'; return; }
+
+      users[email] = {name, email, pwd};
+      msg.textContent='Account created — you can now sign in.';
+      msg.className='success';
+      // auto-switch to sign-in after short delay
+      setTimeout(()=>{ showSignIn(); document.getElementById('siEmail').value = email; }, 900);
+    });
+
+    // Sign In
+    document.getElementById('formSignIn').addEventListener('submit', function(e){
+      e.preventDefault();
+      const email = document.getElementById('siEmail').value.trim().toLowerCase();
+      const pwd = document.getElementById('siPassword').value;
+      const msg = document.getElementById('siMsg');
+      msg.textContent=''; msg.className='';
+
+      if(!email || !pwd){ msg.textContent='Enter email and password.'; msg.className='error'; return; }
+      const u = users[email];
+      if(!u || u.pwd !== pwd){ msg.textContent='Invalid email or password.'; msg.className='error'; return; }
+
+      msg.textContent = `Welcome back, ${u.name}! (demo)`;
+      msg.className = 'success';
+      // demo: clear password
+      document.getElementById('siPassword').value = '';
+    });
+
+    // Guest / Forgot handlers (demo)
+    document.getElementById('guestBtn').addEventListener('click', function(){
+      const msg = document.getElementById('siMsg');
+      msg.textContent = 'Guest mode enabled — local demo only.';
+      msg.className = 'success';
+    });
+    document.getElementById('forgot').addEventListener('click', function(){
+      alert('Demo: No password recovery because this is client-only demo.');
+    });
+    document.getElementById('cancelSignUp').addEventListener('click', showSignIn);
+
+    // keyboard accessibility: Enter on tab toggles handled naturally by button
+  </script>
+</body>
+</html>
