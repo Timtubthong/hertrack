@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Create Account</title>
+  <style>
+    body {
+      background-color: #fafdff;
+      font-family: "Poppins", Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      width: 380px;
+      text-align: center;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      color: #fb6a90;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #b0d3f2;
+      font-size: 14px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #fb6a90;
+      box-shadow: 0 0 4px #fb6a90;
+    }
+
+    button {
+      width: 90%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background-color: #fb6a90;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #fe0c21;
+    }
+
+    .btn-secondary {
+      background-color: #b0d3f2;
+      color: #1f1f1f;
+      margin-top: 10px;
+    }
+
+    .btn-secondary:hover {
+      background-color: #a4c8ef;
+    }
+
+    .toggle-link {
+      color: #fb6a90;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 10px;
+      display: inline-block;
+    }
+
+    .gender-select {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0;
+      gap: 40px;
+    }
+
+    .gender {
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border-radius: 50%;
+      padding: 5px;
+    }
+
+    .gender img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      transition: border-color 0.2s ease;
+    }
+
+    .gender.selected img {
+      border-color: #fb6a90;
+    }
+
+    .footer {
+      font-size: 12px;
+      margin-top: 15px;
+      color: #666;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="login-card">
+    <h2 id="title">เข้าสู่ระบบ</h2>
+
+    <div id="login-form">
+      <input type="text" placeholder="อีเมลหรือชื่อผู้ใช้" id="login-username" />
+      <input type="password" placeholder="รหัสผ่าน" id="login-password" />
+      <button class="btn-primary">เข้าสู่ระบบ</button>
+      <p class="toggle-link" onclick="toggleForm()">ยังไม่มีบัญชี? สมัครเลย</p>
+    </div>
+
+    <div id="signup-form" class="hidden">
+      <input type="text" placeholder="ชื่อผู้ใช้" id="signup-username" />
+      <input type="email" placeholder="อีเมล" id="signup-email" />
+      <input type="password" placeholder="รหัสผ่าน" id="signup-password" />
+
+      <div class="gender-select">
+        <div class="gender" id="male">
+          <img src="man.png" alt="ชาย" />
+          <p>ชาย</p>
+        </div>
+        <div class="gender" id="female">
+          <img src="women.png" alt="หญิง" />
+          <p>หญิง</p>
+        </div>
+      </div>
+
+      <button class="btn-secondary">สร้างบัญชี</button>
+      <p class="toggle-link" onclick="toggleForm()">มีบัญชีอยู่แล้ว? กลับไปล็อกอิน</p>
+    </div>
+
+    <div class="footer">© 2025 YourApp — all rights reserved.</div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById("login-form");
+    const signupForm = document.getElementById("signup-form");
+    const title = document.getElementById("title");
+    const male = document.getElementById("male");
+    const female = document.getElementById("female");
+
+    function toggleForm() {
+      loginForm.classList.toggle("hidden");
+      signupForm.classList.toggle("hidden");
+      title.textContent = loginForm.classList.contains("hidden")
+        ? "สร้างบัญชีใหม่"
+        : "เข้าสู่ระบบ";
+    }
+
+    male.addEventListener("click", () => {
+      male.classList.add("selected");
+      female.classList.remove("selected");
+    });
+
+    female.addEventListener("click", () => {
+      female.classList.add("selected");
+      male.classList.remove("selected");
+    });
+  </script>
+</body>
+</html>
