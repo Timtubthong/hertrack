@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ผลวิเคราะห์ - แอปประจำเดือน</title>
+  
+  <style>
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+      background-color: #FAFDFF;
+      color: #333333;
+      margin: 0;
+      padding: 16px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #FB6A90;
+      text-align: center;
+    }
+    .card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-weight: 600;
+      margin: 12px 0 8px;
+      color: #286BA9;
+    }
+    /* สไตล์สำหรับแสดงผลลัพธ์ */
+    .result-list {
+      list-style: none;
+      padding-left: 0;
+    }
+    .result-list li {
+      padding: 8px 12px;
+      background-color: #f7f9fc;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .result-list strong {
+      color: #e91e63;
+      font-size: 1.1rem;
+    }
+    .explanation {
+      line-height: 1.6;
+      font-size: 0.95rem;
+      background-color: #fffde7; /* สีเหลืองอ่อน */
+      border: 1px solid #fbc02d;
+      padding: 15px;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📊 ผลวิเคราะห์และสรุป</h1>
+
+  <div class="card">
+    <div class="section-title">⚡ สรุปอาการที่พบบ่อย</div>
+    <ul id="symptom-results" class="result-list">
+      </ul>
+  </div>
+
+  <div class="card">
+    <div class="section-title">😊 สรุปอารมณ์โดยรวม</div>
+    <ul id="mood-results" class="result-list">
+      </ul>
+  </div>
+
+  <div class="card">
+    <div class="section-title">💡 คำอธิบายผล</div>
+    <div class="explanation">
+      <p>ข้อมูลนี้คือการนับความถี่ของสิ่งที่คุณบันทึกไว้ทั้งหมดจาก LocalStorage เพื่อให้คุณเห็นภาพรวมว่า...</p>
+      <ul id="analysis-explanation">
+        </ul>
+      <p>คุณสามารถใช้ข้อมูลนี้เพื่อสังเกตแพตเทิร์นของตัวเอง เช่น "ช่วงนี้ฉันปวดหัวบ่อย" หรือ "ฉันมักจะเครียด" เพื่อหาวิธีดูแลตัวเองต่อไปค่ะ</p>
+    </div>
+  </div>
+
+  <div class="card" style="text-align: center;">
+    <a href="index.html" style="text-decoration: none; color: #555;">&larr; กลับไปหน้าบันทึก</a>
+  </div>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // 1. สร้าง Object ว่างสำหรับนับ
+      const symptomCounts = {};
+      const moodCounts = {};
+      let totalRecords = 0; // นับจำนวนวันท่ีบันทึก
+
+      // 2. วนลูปอ่านข้อมูลทั้งหมดจาก LocalStorage
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+
+        // เราจะสนใจเฉพาะ Key ที่มีหน้าตาเป็นวันที่ 'YYYY-MM-DD'
+        // (เราไม่สนใจ Key 'cycleHistory' จากแอปแรก)
+        if (/^\d{4}-\d{2}-\d{2}$/.test(key)) {
+          totalRecords++;
+          const data = JSON.parse(localStorage.getItem(key));
+
+          // 3. เริ่มนับข้อมูล
+          
+          // นับอารมณ์
+          if (data.mood) {
+            moodCounts[data.mood] = (moodCounts[data.mood] || 0) + 1;
+          }
+
+          // นับอาการ (ต้องวนลูปเพราะเป็น Array)
+          if (data.symptoms && data.symptoms.length > 0) {
+            data.symptoms.forEach(symptom => {
+              symptomCounts[symptom] = (symptomCounts[symptom] || 0) + 1;
+            });
+          }
+        }
+      }
+
+      // 4. เรียงลำดับข้อมูลจากมากไปน้อย
+      const sortedSymptoms = Object.entries(symptomCounts).sort((a, b) => b[1] - a[1]);
+      const sortedMoods = Object.entries(moodCounts).sort((a, b) => b[1] - a[1]);
+
+      // 5. นำข้อมูลไปแสดงผล
+      const symptomList = document.getElementById('symptom-results');
+      const moodList = document.getElementById('mood-results');
+      const explanationList = document.getElementById('analysis-explanation');
+
+      // แสดงผลอาการ
+      if (sortedSymptoms.length === 0) {
+        symptomList.innerHTML = '<li>ยังไม่มีการบันทึกอาการ</li>';
+      } else {
+        sortedSymptoms.forEach(([name, count]) => {
+          symptomList.innerHTML += `<li>${name} <span><strong>${count} ครั้ง</strong></span></li>`;
+        });
+      }
+
+      // แสดงผลอารมณ์
+      if (sortedMoods.length === 0) {
+        moodList.innerHTML = '<li>ยังไม่มีการบันทึกอารมณ์</li>';
+      } else {
+        sortedMoods.forEach(([name, count]) => {
+          moodList.innerHTML += `<li>${name} <span><strong>${count} ครั้ง</strong></span></li>`;
+        });
+      }
+
+      // 6. สร้างคำอธิบายผลแบบไดนามิก
+      const topSymptom = sortedSymptoms[0] ? sortedSymptoms[0][0] : 'ไม่มี';
+      const topMood = sortedMoods[0] ? sortedMoods[0][0] : 'ไม่มี';
+
+      explanationList.innerHTML = `
+        <li>คุณมีการบันทึกข้อมูลมาแล้วทั้งหมด <strong>${totalRecords} วัน</strong></li>
+        <li>อาการที่คุณพบบ่อยที่สุดคือ <strong>${topSymptom}</strong></li>
+        <li>อารมณ์ที่คุณพบบ่อยที่สุดคือ <strong>${topMood}</strong></li>
+      `;
+
+    });
+  </script>
+
+</body>
+</html>
