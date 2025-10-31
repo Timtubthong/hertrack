@@ -20,7 +20,7 @@ export default function PeriodCalendar() {
     // 🩸 ช่วงมีประจำเดือน
     for (let i = 0; i < periodLength; i++) {
       const date = periodStartDate.add(i, "day").format("YYYY-MM-DD");
-      marks[date] = { marked: true, selected: true, selectedColor: "#e91e63" };
+      marks[date] = { marked: true, selected: true, selectedColor: "#fe0c21" };
     }
 
     // 🌼 วันตกไข่ (ประมาณวันที่ 14 ของรอบ)
@@ -66,3 +66,4 @@ const styles = StyleSheet.create({
   header: { fontSize: 20, textAlign: "center", marginBottom: 10 },
   legend: { marginTop: 10, padding: 10, backgroundColor: "#f8f8f8", borderRadius: 10 },
 });
+
